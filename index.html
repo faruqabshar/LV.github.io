@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Animation</title>
+    <style>
+      body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #000;
+        font-family: "Arial", sans-serif;
+        overflow: hidden;
+      }
+
+      .game-container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-image: url("background1.png");
+      }
+
+      .ground {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 20%;
+        background-image: url("ground1.png");
+        display: flex;
+        align-items: flex-end;
+      }
+
+      #character {
+        position: absolute;
+        bottom: 100%;
+        left: 5%;
+        width: 100px;
+        transition: left 2s;
+        cursor: pointer;
+      }
+
+      #mailbox {
+        position: absolute;
+        bottom: 85%;
+        right: 5%;
+        width: 250px;
+        height: 200px;
+      }
+
+      #popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        height: 50px;
+        transform: translate(-50%, -50%) scale(0);
+        background: linear-gradient(145deg, #e0e0e0, #ffffff);
+        padding: 20px;
+        border-radius: 10px;
+        z-index: 10;
+        transition: transform 0.3s ease-in-out;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        opacity: 0;
+      }
+
+      #popup.show {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+
+      .popup-content {
+        position: relative;
+      }
+
+      #close-popup {
+        position: absolute;
+        top: 30px;
+        right: 10px;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: bold;
+        color: #555;
+      }
+
+      #close-popup:hover {
+        color: #000;
+      }
+
+      .popup-content p {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+      }
+
+      #love-animation {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 150px;
+        height: 100px;
+        background-image: url("love1.png"); /* Ganti dengan gambar love */
+        background-size: cover;
+        animation: loveAnimation 2s forwards;
+        z-index: 9;
+        display: none; /* Mulai dengan display none */
+      }
+
+      @keyframes loveAnimation {
+        0% {
+          transform: translate(-50%, -50%) scale(0);
+        }
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+        }
+      }
+
+      /* Tambahkan CSS untuk model pop up */
+      .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        z-index: 10;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        display: none;
+      }
+
+      .popup.show {
+        display: block;
+      }
+
+      .popup h2 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      .popup p {
+        margin: 5px 0;
+        color: #555;
+      }
+
+      .popup button {
+        padding: 10px 20px;
+        top: 20px;
+        margin-top: 15px;
+        margin-left: 25%;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .popup button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="ground">
+        <img id="character" src="character.png" alt="Character" />
+        <img id="mailbox" src="mailbox.png" alt="Mailbox" />
+      </div>
+    </div>
+    <!-- Pop up -->
+    <div id="popup" class="popup hidden">
+      <div class="popup-content">
+        <span id="close-popup">&times;</span>
+        <p id="popup-content-1"><b>Halo Tiara Cantikk</b></p>
+        <p id="popup-content-2" style="display: none">
+          <b>Wofyuuu <3</b>
+        </p>
+        <!-- Tambahkan elemen untuk love -->
+        <div id="love-animation"></div>
+        <!-- Tambahkan tombol next -->
+        <button id="next-popup">Next</button>
+      </div>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Mendapatkan referensi elemen tombol "Next"
+        const nextPopupButton = document.getElementById("next-popup");
+
+        // Mendapatkan referensi elemen konten popup
+        const popupContent1 = document.getElementById("popup-content-1");
+        const popupContent2 = document.getElementById("popup-content-2");
+
+        // Mendapatkan elemen popup dan karakter
+        const popup = document.getElementById("popup");
+        const character = document.getElementById("character");
+        const loveAnimation = document.getElementById("love-animation");
+        const closePopup = document.getElementById("close-popup");
+
+        // Mengatur event listener untuk karakter
+        character.addEventListener("click", function () {
+          character.style.left = "30%";
+          setTimeout(function () {
+            popup.classList.remove("hidden");
+            popup.classList.add("show");
+            loveAnimation.style.display = "block";
+          }, 2000);
+        });
+
+        // Mengatur event listener untuk tombol close
+        closePopup.addEventListener("click", function () {
+          popup.classList.remove("show");
+          setTimeout(function () {
+            popup.classList.add("hidden");
+            character.style.left = "5%";
+            loveAnimation.style.display = "none";
+            popupContent1.style.display = "block";
+            popupContent2.style.display = "none";
+          }, 300);
+        });
+
+        // Mengatur event listener untuk tombol next
+        nextPopupButton.addEventListener("click", function () {
+          popupContent1.style.display = "none";
+          popupContent2.style.display = "block";
+          // Sembunyikan tombol "Next" saat menampilkan popup kedua
+          nextPopupButton.style.display = "none";
+        });
+      });
+    </script>
+  </body>
+</html>
